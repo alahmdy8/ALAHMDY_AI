@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>ALAHMDY AI – كتابة المحتوى</title>
+  <style>
+    body {font-family: Arial; background:#111; color:#fff; padding:20px;}
+    .box {max-width:600px; margin:auto; background:#1c1c1c; padding:20px; border-radius:10px;}
+    h2 {text-align:center; color:gold;}
+    label {display:block; margin-top:15px;}
+    input, select, textarea, button {
+      width:100%; padding:10px; margin-top:5px; border-radius:6px; border:none;
+    }
+    button {background:gold; color:#000; font-size:16px; cursor:pointer;}
+    .result {margin-top:20px; background:#000; padding:15px; border-radius:6px; white-space:pre-wrap;}
+  </style>
+</head>
+<body>
+
+<div class="box">
+  <h2>✍️ ALAHMDY AI – كتابة المحتوى</h2>
+
+  <label>الموضوع</label>
+  <input id="topic" placeholder="اكتب موضوع المحتوى">
+
+  <label>نوع المحتوى</label>
+  <select id="content_type">
+    <option>منشور فيسبوك</option>
+    <option>وصف منتج</option>
+    <option>رسالة واتساب تسويقية</option>
+  </select>
+
+  <label>النبرة</label>
+  <select id="tone">
+    <option>تسويقي</option>
+    <option>رسمي</option>
+    <option>بسيط</option>
+  </select>
+
+  <button onclick="generate()">إنشاء المحتوى</button>
+
+  <div class="result" id="result"></div>
+</div>
+
+<script>
+function generate() {
+  document.getElementById('result').innerText = '⏳ جاري الإنشاء...';
+
+  fetch('http://127.0.0.1:5000/api/write', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      user: 'test_uer',
+user: 'test_user',
+
+      topic: document.getElementById('topic').value,
+      content_type: document.getElementById('content_type').value,
+      tone: document.getElementById('tone').value
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if(data.error) {
+      document.getElementById('result').innerText = data.error;
+    } else {
+      document.getElementById('result').innerText =
+        data.result + "\n\nالرصيد المتبقي: " + data.remaining_credits;
+    }
+  })
+  .catch(() => {
+    document.getElementById('result').innerText = 'خطأ في الاتصال بالسيرفر';
+  });
+}
+</script>
+
+</body>
+</html>
