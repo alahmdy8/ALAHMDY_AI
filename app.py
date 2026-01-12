@@ -6,7 +6,6 @@ import sqlite3
 
 app = Flask(__name__)
 CORS(app)
-openai.api_key = "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"
 DB_NAME = "alahmdy_ai.db"
 COST_PER_REQUEST = 5
 
